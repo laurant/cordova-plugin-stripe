@@ -106,7 +106,7 @@ public class CordovaStripe extends CordovaPlugin {
         bankAccount.getString("account_number"),
         bankAccount.getString("country"),
         bankAccount.getString("currency"),
-        bankAccount.getString("routing_number")
+        bankAccount.has("routing_number") ? bankAccount.getString("routing_number") : null
       );
 
       if (bankAccount.getString("account_holder_name") != null) {
