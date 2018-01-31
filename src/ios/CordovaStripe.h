@@ -6,6 +6,7 @@
 
 - (void) setPublishableKey:(CDVInvokedUrlCommand *) command;
 - (void) createCardToken:(CDVInvokedUrlCommand *) command;
+- (void) check3DSecureSupport:(CDVInvokedUrlCommand *) command;
 - (void) validateCardNumber: (CDVInvokedUrlCommand *) command;
 - (void) validateExpiryDate: (CDVInvokedUrlCommand *) command;
 - (void) validateCVC: (CDVInvokedUrlCommand *) command;

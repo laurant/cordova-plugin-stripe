@@ -64,6 +64,12 @@ module.exports = {
     exec(success, error, "CordovaStripe", "createCardToken", [creditCard]);
   },
 
+  check3DSecureSupport: function(creditCard, success, error) {
+    success = success || noop;
+    error = error || noop;
+    exec(success, error, "CordovaStripe", "check3DSecureSupport", [creditCard]);
+  }
+
   /**
    * Create a bank account token
    * @param bankAccount {module:stripe.BankAccountTokenParams} Bank account information

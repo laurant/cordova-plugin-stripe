@@ -32,6 +32,8 @@ public class CordovaStripe extends CordovaPlugin {
       setPublishableKey(data.getString(0), callbackContext);
     } else if (action.equals("createCardToken")) {
       createCardToken(data.getJSONObject(0), callbackContext);
+    } else if (action.equals("check3DSecureSupport")) {
+      check3DSecureSupport(data.getJSONObject(0), callbackContext);
     } else if (action.equals("createBankAccountToken")) {
       createBankAccountToken(data.getJSONObject(0), callbackContext);
     } else if (action.equals("validateCardNumber")) {
@@ -61,11 +63,35 @@ public class CordovaStripe extends CordovaPlugin {
 
   }
 
-  private void createCardToken(final JSONObject creditCard, final CallbackContext callbackContext) {
-
+  private void check3DSecureSupport(final JSONObject creditCard, final CallbackContext callbackContext) {
     try {
 
-      Card cardObject = new Card(
+      Card cardObject = createCardObjectFromJSON(creditCard);
+      SourceParams cardSourceParams = SourceParams.createCardParams(cardObject);
+
+      stripeInstance.createSource(
+        cardSourceParams,
+        new SourceCallback() {
+          public void onSuccess(Source source) {
+            SourceCardData cardData = (SourceCardData) cardSource.getSourceTypeModel();
+            String threeDStatus = cardData.getThreeDSecureStatus();
+            JSONObject statusObject = new JSONObject();
+            statusObject.put('three_d_secure', threeDStatus);
+            callbackContext.success(statusObject);
+          }
+          public void onError(Exception error) {
+            callbackContext.error(error.getLocalizedMessage());
+          }
+        }
+      );
+
+    } catch (JSONException e) {
+      callbackContext.error(e.getLocalizedMessage());
+    }
+  }
+
+  private Card createCardObjectFromJSON(final JSONObject creditCard) {
+    return new Card(
         creditCard.getString("number"),
         creditCard.getInt("expMonth"),
         creditCard.getInt("expYear"),
@@ -79,6 +105,13 @@ public class CordovaStripe extends CordovaPlugin {
         creditCard.has("address_country") ? creditCard.getString("address_country") : null,
         creditCard.has("currency") ? creditCard.getString("currency") : null
       );
+  }
+
+  private void createCardToken(final JSONObject creditCard, final CallbackContext callbackContext) {
+
+    try {
+
+      Card cardObject = createCardObjectFromJSON(creditCard);
 
       stripeInstance.createToken(
         cardObject,
@@ -190,7 +223,7 @@ public class CordovaStripe extends CordovaPlugin {
       tokenObject.put("type", token.getType());
 
       return tokenObject;
-    } 
+    }
     catch (JSONException e) {
       return null;
     }
@@ -225,7 +258,7 @@ public class CordovaStripe extends CordovaPlugin {
 
       return tokenObject;
 
-    } 
+    }
     catch (JSONException e) {
       return null;
     }
