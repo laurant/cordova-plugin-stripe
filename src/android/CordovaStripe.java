@@ -77,7 +77,7 @@ public class CordovaStripe extends CordovaPlugin {
         cardSourceParams,
         new SourceCallback() {
           public void onSuccess(Source source) {
-            SourceCardData cardData = (SourceCardData) cardSource.getSourceTypeModel();
+            SourceCardData cardData = (SourceCardData) source.getSourceTypeModel();
             String threeDStatus = cardData.getThreeDSecureStatus();
             JSONObject statusObject = new JSONObject();
             statusObject.put("status", threeDStatus);
