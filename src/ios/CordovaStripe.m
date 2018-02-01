@@ -51,17 +51,17 @@
             result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString: error.localizedDescription];
         } else {
             switch (source.cardDetails.threeDSecure) {
-                case STPSourceCard3DSecureStatus.STPSourceCard3DSecureStatusRequired:
-                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ status: @"required" }];
+                case STPSourceCard3DSecureStatusRequired:
+                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ @"status": @"required" }];
                 break;
-                case STPSourceCard3DSecureStatus.STPSourceCard3DSecureStatusOptional:
-                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ status: @"optional" }];
+                case STPSourceCard3DSecureStatusOptional:
+                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ @"status": @"optional" }];
                 break;
-                case STPSourceCard3DSecureStatus.STPSourceCard3DSecureStatusNotSupported:
-                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ status: @"not_supported" }];
+                case STPSourceCard3DSecureStatusNotSupported:
+                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ @"status": @"not_supported" }];
                 break;
                 default:
-                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ status: @"unknown" }];
+                    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{ @"status": @"unknown" }];
                 break;
             }
         }
