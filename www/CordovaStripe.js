@@ -68,7 +68,7 @@ module.exports = {
     success = success || noop;
     error = error || noop;
     exec(success, error, "CordovaStripe", "check3DSecureSupport", [creditCard]);
-  }
+  },
 
   /**
    * Create a bank account token
