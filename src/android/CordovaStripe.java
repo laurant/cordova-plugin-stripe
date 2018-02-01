@@ -68,34 +68,28 @@ public class CordovaStripe extends CordovaPlugin {
   }
 
   private void check3DSecureSupport(final JSONObject creditCard, final CallbackContext callbackContext) {
-    try {
+    Card cardObject = createCardObjectFromJSON(creditCard);
+    SourceParams cardSourceParams = SourceParams.createCardParams(cardObject);
 
-      Card cardObject = createCardObjectFromJSON(creditCard);
-      SourceParams cardSourceParams = SourceParams.createCardParams(cardObject);
-
-      stripeInstance.createSource(
-        cardSourceParams,
-        new SourceCallback() {
-          public void onSuccess(Source source) {
-            SourceCardData cardData = (SourceCardData) source.getSourceTypeModel();
-            String threeDStatus = cardData.getThreeDSecureStatus();
-            JSONObject statusObject = new JSONObject();
-            try {
-              statusObject.put("status", threeDStatus);
-              callbackContext.success(statusObject);
-            } catch (JSONException e) {
-              callbackContext.error(e.getLocalizedMessage());
-            }
-          }
-          public void onError(Exception error) {
-            callbackContext.error(error.getLocalizedMessage());
+    stripeInstance.createSource(
+      cardSourceParams,
+      new SourceCallback() {
+        public void onSuccess(Source source) {
+          SourceCardData cardData = (SourceCardData) source.getSourceTypeModel();
+          String threeDStatus = cardData.getThreeDSecureStatus();
+          JSONObject statusObject = new JSONObject();
+          try {
+            statusObject.put("status", threeDStatus);
+            callbackContext.success(statusObject);
+          } catch (JSONException e) {
+            callbackContext.error(e.getLocalizedMessage());
           }
         }
-      );
-
-    } catch (JSONException e) {
-      callbackContext.error(e.getLocalizedMessage());
-    }
+        public void onError(Exception error) {
+          callbackContext.error(error.getLocalizedMessage());
+        }
+      }
+    );
   }
 
   private Card createCardObjectFromJSON(final JSONObject creditCard) {
@@ -121,26 +115,19 @@ public class CordovaStripe extends CordovaPlugin {
 
   private void createCardToken(final JSONObject creditCard, final CallbackContext callbackContext) {
 
-    try {
+    Card cardObject = createCardObjectFromJSON(creditCard);
 
-      Card cardObject = createCardObjectFromJSON(creditCard);
-
-      stripeInstance.createToken(
-        cardObject,
-        new TokenCallback() {
-          public void onSuccess(Token token) {
-            callbackContext.success(getCardObjectFromToken(token));
-          }
-          public void onError(Exception error) {
-            callbackContext.error(error.getLocalizedMessage());
-          }
+    stripeInstance.createToken(
+      cardObject,
+      new TokenCallback() {
+        public void onSuccess(Token token) {
+          callbackContext.success(getCardObjectFromToken(token));
         }
-      );
-
-    } catch (JSONException e) {
-      callbackContext.error(e.getLocalizedMessage());
-    }
-
+        public void onError(Exception error) {
+          callbackContext.error(error.getLocalizedMessage());
+        }
+      }
+    );
   }
 
   private void createBankAccountToken(final JSONObject bankAccount, final CallbackContext callbackContext) {
