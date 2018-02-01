@@ -80,8 +80,12 @@ public class CordovaStripe extends CordovaPlugin {
             SourceCardData cardData = (SourceCardData) source.getSourceTypeModel();
             String threeDStatus = cardData.getThreeDSecureStatus();
             JSONObject statusObject = new JSONObject();
-            statusObject.put("status", threeDStatus);
-            callbackContext.success(statusObject);
+            try {
+              statusObject.put("status", threeDStatus);
+              callbackContext.success(statusObject);
+            } catch (JSONException e) {
+              callbackContext.error(e.getLocalizedMessage());
+            }
           }
           public void onError(Exception error) {
             callbackContext.error(error.getLocalizedMessage());
@@ -95,20 +99,24 @@ public class CordovaStripe extends CordovaPlugin {
   }
 
   private Card createCardObjectFromJSON(final JSONObject creditCard) {
-    return new Card(
-        creditCard.getString("number"),
-        creditCard.getInt("expMonth"),
-        creditCard.getInt("expYear"),
-        creditCard.getString("cvc"),
-        creditCard.has("name") ? creditCard.getString("name") : null,
-        creditCard.has("address_line1") ? creditCard.getString("address_line1") : null,
-        creditCard.has("address_line2") ? creditCard.getString("address_line2") : null,
-        creditCard.has("address_city") ? creditCard.getString("address_city") : null,
-        creditCard.has("address_state") ? creditCard.getString("address_state") : null,
-        creditCard.has("postalCode") ? creditCard.getString("postalCode") : null,
-        creditCard.has("address_country") ? creditCard.getString("address_country") : null,
-        creditCard.has("currency") ? creditCard.getString("currency") : null
-      );
+    try {
+      return new Card(
+          creditCard.getString("number"),
+          creditCard.getInt("expMonth"),
+          creditCard.getInt("expYear"),
+          creditCard.getString("cvc"),
+          creditCard.has("name") ? creditCard.getString("name") : null,
+          creditCard.has("address_line1") ? creditCard.getString("address_line1") : null,
+          creditCard.has("address_line2") ? creditCard.getString("address_line2") : null,
+          creditCard.has("address_city") ? creditCard.getString("address_city") : null,
+          creditCard.has("address_state") ? creditCard.getString("address_state") : null,
+          creditCard.has("postalCode") ? creditCard.getString("postalCode") : null,
+          creditCard.has("address_country") ? creditCard.getString("address_country") : null,
+          creditCard.has("currency") ? creditCard.getString("currency") : null
+        );
+    } catch (JSONException e) {
+      return null;
+    }
   }
 
   private void createCardToken(final JSONObject creditCard, final CallbackContext callbackContext) {
