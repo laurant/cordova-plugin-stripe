@@ -14,6 +14,7 @@ import com.stripe.android.SourceCallback;
 import com.stripe.android.Stripe;
 import com.stripe.android.model.BankAccount;
 import com.stripe.android.model.SourceParams;
+import com.stripe.android.model.Source;
 import com.stripe.android.model.SourceCardData;
 import com.stripe.android.model.Card;
 import com.stripe.android.model.Token;
