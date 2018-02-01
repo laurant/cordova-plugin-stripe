@@ -99,7 +99,9 @@
         cardParams.name = cardInfo[@"name"];
         cardParams.currency = cardInfo[@"currency"];
 
-        [self.client createSourceWithParams:cardParams completion:[self handleSourceCallback:command]];
+        STPSourceParams* sourceParams = [STPSourceParams cardParamsWithCard:cardParams];
+
+        [self.client createSourceWithParams:sourceParams completion:[self handleSourceCallback:command]];
 
     }];
 }
