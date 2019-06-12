@@ -234,4 +234,28 @@
     [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
 }
 
+- (void)handleCardAction:(CDVInvokedUrlCommand *)command
+{
+    STPRedirectContext *redirectContext = [[STPRedirectContext alloc] initWithPaymentIntent:[command.arguments objectAtIndex:0] completion:^(NSString *clientSecret, NSError *redirectError) {
+        // Fetch the latest status of the Payment Intent if necessary
+        [[STPAPIClient sharedClient] retrievePaymentIntentWithClientSecret:clientSecret completion:^(STPPaymentIntent *paymentIntent, NSError *error) {
+            if (paymentIntent.status == STPPaymentIntentStatusSucceeded) {
+                CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"Succeeded"];
+                [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            } else {
+                CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Failed"];
+                [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+            }
+        }];
+    }];
+
+    if (redirectContext) {
+        // opens SFSafariViewController to the necessary URL
+        [redirectContext startRedirectFlowFromViewController:self.viewController];
+    } else {
+        CDVPluginResult *result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"PaymentIntent action is not yet supported"];
+        [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+    }
+}
+
 @end

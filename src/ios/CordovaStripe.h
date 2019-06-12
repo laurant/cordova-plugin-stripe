@@ -12,5 +12,6 @@
 - (void) validateCVC: (CDVInvokedUrlCommand *) command;
 - (void) getCardType: (CDVInvokedUrlCommand *) command;
 - (void) createBankAccountToken: (CDVInvokedUrlCommand *) command;
+- (void) handleCardAction: (CDVInvokedUrlCommand *)command;
 
 @end
