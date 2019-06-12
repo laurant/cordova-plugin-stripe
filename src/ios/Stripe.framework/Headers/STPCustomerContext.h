@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol STPEphemeralKeyProvider;
+@protocol STPCustomerEphemeralKeyProvider;
 @class STPEphemeralKey, STPEphemeralKeyManager;
 
 /**
@@ -23,10 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
  instance's cached customer. On your backend, be sure to create and return a
  new ephemeral key for the Customer object associated with the new user.
  */
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated"
 @interface STPCustomerContext : NSObject <STPBackendAPIAdapter>
-#pragma clang diagnostic pop
 
 /**
  Initializes a new `STPCustomerContext` with the specified key provider.
@@ -38,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param keyProvider   The key provider the customer context will use.
  @return the newly-instantiated customer context.
  */
-- (instancetype)initWithKeyProvider:(id<STPEphemeralKeyProvider>)keyProvider;
+- (instancetype)initWithKeyProvider:(id<STPCustomerEphemeralKeyProvider>)keyProvider;
 
 /**
  `STPCustomerContext` will cache its customer object for up to 60 seconds.
@@ -48,6 +45,19 @@ NS_ASSUME_NONNULL_BEGIN
  customer object associated with the new user.
  */
 - (void)clearCachedCustomer;
+
+/**
+ By default, `STPCustomerContext` will filter Apple Pay sources when it retrieves
+ a Customer object. Apple Pay sources should generally not be re-used and
+ shouldn't be offered to customers as a new payment source (Apple Pay sources may
+ only be re-used for subscriptions).
+
+ If you are using `STPCustomerContext` to back your own UI and would like to
+ disable Apple Pay filtering, set this property to YES.
+
+ Note: If you are using `STPPaymentContext`, you should not change this property.
+ */
+@property (nonatomic, assign) BOOL includeApplePaySources;
 
 @end
 
