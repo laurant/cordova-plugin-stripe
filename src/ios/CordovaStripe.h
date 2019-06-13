@@ -3,6 +3,7 @@
 
 @interface CordovaStripe : CDVPlugin
 @property (nonatomic, retain) STPAPIClient *client;
+@property (nonatomic, retain) STPRedirectContext *redirectContext;
 
 - (void) setPublishableKey:(CDVInvokedUrlCommand *) command;
 - (void) createCardToken:(CDVInvokedUrlCommand *) command;

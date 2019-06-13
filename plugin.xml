@@ -28,6 +28,8 @@
 
         <header-file src="src/ios/CordovaStripe.h" />
         <source-file src="src/ios/CordovaStripe.m" />
+        <header-file src="src/ios/AppDelegate+CordovaStripe.h" />
+        <source-file src="src/ios/AppDelegate+CordovaStripe.m" />
 
         <framework src="src/ios/Stripe.framework" custom="true" />
 
