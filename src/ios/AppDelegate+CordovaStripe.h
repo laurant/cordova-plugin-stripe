@@ -1,5 +1,5 @@
 #import "AppDelegate.h"
 
-@interface AppDelegate (FirebaseAuthPlugin)
+@interface AppDelegate (CordovaStripe)
 
 @end
