@@ -1,7 +1,7 @@
-#import "AppDelegate+FirebaseAuthPlugin.h"
+#import "AppDelegate+CordovaStripe.h"
 #import <objc/runtime.h>
 
-@implementation AppDelegate (FirebaseAuthPlugin)
+@implementation AppDelegate (CordovaStripe)
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
     BOOL stripeHandled = [Stripe handleStripeURLCallbackWithURL:url];
